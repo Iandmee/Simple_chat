@@ -4,8 +4,8 @@ Options_file = "options.bin"
 
 
 class Server:
-    domain = "localhost"
-    port = "1337"
+    domain = "207.154.242.118"
+    port = "8080"
     secure = False
 
 
