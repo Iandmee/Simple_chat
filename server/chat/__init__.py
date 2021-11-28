@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = "super_s3cr3t"
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = "sqlite:///C:\\Users\\milae\\PycharmProjects\\pythonProject2\\server\\test.db"
+] = "sqlite:///source"
 db = SQLAlchemy(app)
 login_length = 40
 chat_name_length = login_length
