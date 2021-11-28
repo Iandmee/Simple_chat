@@ -1,10 +1,12 @@
 from chat import *
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(login_length), unique=True, nullable=False)
     password = db.Column(db.String(password_length), unique=False, nullable=False)
     messages = db.relationship("Message", backref="user", lazy="dynamic")
+
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +14,7 @@ class Chat(db.Model):
     password = db.Column(db.String(password_length), unique=False, nullable=False)
     messages = db.relationship("Message", backref="chat", lazy="dynamic")
     chat_id = db.Column(db.String(password_length), unique=True, nullable=False)
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
