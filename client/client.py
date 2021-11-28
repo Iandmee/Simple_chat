@@ -384,7 +384,7 @@ def options_setting() -> None:
                 Server.domain = new_server_domain
                 print(Style.BRIGHT + colored("Success!", "green"))
             elif user_input == "2":
-                print("New server port: ", end="")
+                print("New server port(\"Enter\" for empty): ", end="")
                 new_server_port = sys.stdin.readline().strip()
                 Server.port = new_server_port
                 print(Style.BRIGHT + colored("Success!", "green"))
