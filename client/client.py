@@ -1,11 +1,21 @@
 import json, base64, threading, sys
 from config import *
-import colorama
+import colorama, re
 from colorama import Style
 from termcolor import colored
 from time import sleep
 
 colorama.init(autoreset=True)
+
+
+def clear_text(input: str) -> str:
+    """
+    Clear text from ANSI escape sequences
+    :param input:
+    :return:
+    """
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", input)
 
 
 def get_url() -> str:
@@ -191,7 +201,7 @@ def print_messages() -> None:
                 )
         except Exception as e:
             pass
-        sleep(1)
+        sleep(3)
 
 
 def chat_session(chat_name: str) -> None:
@@ -239,7 +249,7 @@ def chat_session(chat_name: str) -> None:
                 + colored("> ", "cyan"),
                 end="",
             )
-            user_message = sys.stdin.readline().strip()
+            user_message = clear_text(sys.stdin.readline().strip())
             print(
                 "\033[A                             \033[A"
             )  # for deleting previous string in console
@@ -275,12 +285,12 @@ def logged_in() -> None:
         try:
             print_logged_in_menu()
             print(colored("> ", "cyan"), end="")
-            user_input = sys.stdin.readline().strip()
+            user_input = clear_text(sys.stdin.readline().strip())
             if user_input == "1":
                 print("Chat_id: ", end="")
-                chat_id = sys.stdin.readline().strip()
+                chat_id = clear_text(sys.stdin.readline().strip())
                 print("Password: ", end="")
-                password = sys.stdin.readline().strip()
+                password = clear_text(sys.stdin.readline().strip())
                 status = json.loads(
                     api(chat_id=chat_id, password=password, type="connect")
                 )
@@ -293,11 +303,11 @@ def logged_in() -> None:
 
             elif user_input == "2":
                 print("Chat_name: ", end="")
-                chat_name = sys.stdin.readline().strip()
+                chat_name = clear_text(sys.stdin.readline().strip())
+                print("Password: ", end="")
+                password = clear_text(sys.stdin.readline().strip())
                 print("Password_check: ", end="")
-                password = sys.stdin.readline().strip()
-                print("Password_check: ", end="")
-                password_check = sys.stdin.readline().strip()
+                password_check = clear_text(sys.stdin.readline().strip())
                 status = json.loads(
                     api(
                         chat_name=chat_name,
@@ -335,7 +345,7 @@ def recover_session(options: dict) -> bool:
         Client.login = options["login"]
         Client.password = options["password"]
         print(colored("Load saved user?(Y/n): ", "cyan"), end="")
-        user_input = sys.stdin.readline().strip()
+        user_input = clear_text(sys.stdin.readline().strip())
         if user_input == "Y":
             try:
                 status = json.loads(
@@ -362,7 +372,7 @@ def save_creds_question() -> None:
         + "Save your login and password?(Y/n): ",
         end="",
     )
-    user_input = sys.stdin.readline().strip()
+    user_input = clear_text(sys.stdin.readline().strip())
     if user_input == "Y":
         if set_options(login=Client.login, password=Client.password):
             print(Style.BRIGHT + colored("Saved!", "green"))
@@ -377,15 +387,15 @@ def options_setting() -> None:
         try:
             print_settings_menu()
             print("Change/Choose option" + Style.BRIGHT + colored("> ", "cyan"), end="")
-            user_input = sys.stdin.readline().strip()
+            user_input = clear_text(sys.stdin.readline().strip())
             if user_input == "1":
                 print("New domain: ", end="")
-                new_server_domain = sys.stdin.readline().strip()
+                new_server_domain = clear_text(sys.stdin.readline().strip())
                 Server.domain = new_server_domain
                 print(Style.BRIGHT + colored("Success!", "green"))
             elif user_input == "2":
-                print("New server port(\"Enter\" for empty): ", end="")
-                new_server_port = sys.stdin.readline().strip()
+                print('New server port("Enter" for empty): ', end="")
+                new_server_port = clear_text(sys.stdin.readline().strip())
                 Server.port = new_server_port
                 print(Style.BRIGHT + colored("Success!", "green"))
             elif user_input == "3":
@@ -429,14 +439,14 @@ def main_func() -> None:
         try:
             print_initial_menu()
             print(Style.BRIGHT + colored("> ", "cyan"), end="")
-            user_input = sys.stdin.readline().strip()
+            user_input = clear_text(sys.stdin.readline().strip())
 
             if user_input == "1":
                 print(colored("### Login form ###", "magenta"))
                 print("Login: ", end="")
-                Client.login = sys.stdin.readline().strip()
+                Client.login = clear_text(sys.stdin.readline().strip())
                 print("Password: ", end="")
-                Client.password = sys.stdin.readline().strip()
+                Client.password = clear_text(sys.stdin.readline().strip())
                 status = json.loads(
                     api(login=Client.login, password=Client.password, type="login")
                 )
@@ -450,11 +460,11 @@ def main_func() -> None:
             elif user_input == "2":
                 print(colored("### Register form ###", "magenta"))
                 print("Login: ", end="")
-                Client.login = sys.stdin.readline().strip()
+                Client.login = clear_text(sys.stdin.readline().strip())
                 print("Password: ", end="")
-                Client.password = sys.stdin.readline().strip()
+                Client.password = clear_text(sys.stdin.readline().strip())
                 print("Repeat Password: ", end="")
-                password_check = sys.stdin.readline().strip()
+                password_check = clear_text(sys.stdin.readline().strip())
                 status = json.loads(
                     api(
                         login=Client.login,

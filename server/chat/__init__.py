@@ -3,9 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = "super_s3cr3t"
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = "sqlite:///source"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///./test.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 login_length = 40
 chat_name_length = login_length

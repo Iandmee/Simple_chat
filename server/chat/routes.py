@@ -13,13 +13,13 @@ def login() -> json:
     :return: json string with success status or non success status
     """
     try:
-        login = request.form["login"]
+        login = clear_text(request.form["login"])
     except Exception as e:
         login = None
         print(e)
 
     try:
-        password = request.form["password"]
+        password = clear_text(request.form["password"])
     except Exception as e:
         password = None
         print(e)
@@ -42,18 +42,18 @@ def register() -> json:
     :return: json string with success status or non success status
     """
     try:
-        login = request.form["login"]
+        login = clear_text(request.form["login"])
     except Exception as e:
         login = None
         print(e)
 
     try:
-        password = request.form["password"]
+        password = clear_text(request.form["password"])
     except Exception as e:
         password = None
         print(e)
     try:
-        password_check = request.form["password_check"]
+        password_check = clear_text(request.form["password_check"])
     except Exception as e:
         password_check = None
         print(e)
@@ -78,12 +78,12 @@ def connect() -> json:
     :return: json string with success status or non success status
     """
     try:
-        chat_id = request.form["chat_id"]
+        chat_id = clear_text(request.form["chat_id"])
     except Exception as e:
         chat_id = None
         print(e)
     try:
-        password = request.form["password"]
+        password = clear_text(request.form["password"])
     except Exception as e:
         password = None
         print(e)
@@ -103,17 +103,17 @@ def create() -> json:
         return jsonify(status_message="You are not logged in!!!", status=0)
 
     try:
-        chat_name = request.form["chat_name"]
+        chat_name = clear_text(request.form["chat_name"])
     except Exception as e:
         chat_name = None
         print(e)
     try:
-        password = request.form["password"]
+        password = clear_text(request.form["password"])
     except Exception as e:
         password = None
         print(e)
     try:
-        password_check = request.form["password_check"]
+        password_check = clear_text(request.form["password_check"])
     except Exception as e:
         password_check = None
         print(e)
@@ -141,7 +141,7 @@ def send_message() -> json:
     if "chat_id" not in session.keys():
         return jsonify(status_message="You are not in chat!!!", status=0)
     try:
-        message = request.form["message"]
+        message = clear_text(request.form["message"])
         check = base64.b64decode(message)
     except Exception as e:
         message = None
@@ -163,7 +163,7 @@ def get_messages() -> json:
     if "chat_id" not in session.keys():
         return jsonify(status_message="You are not in chat!!!", status=0)
     try:
-        count = request.form["count"]
+        count = int(clear_text(request.form["count"]))
         messages_and_last_message_id = get(session["chat_id"], count)
         return jsonify(
             status_message="Success!",
@@ -193,11 +193,11 @@ def poll() -> json:
     if "chat_id" not in session.keys():
         return jsonify(status_message="You are not in chat!!!", status=0)
     try:
-        last_message_id = request.form["last_message_id"]
+        last_message_id = clear_text(request.form["last_message_id"])
     except Exception as e:
         last_message_id = None
         print(e)
-    for i in range(100):
+    for i in range(10):
         messages_and_last_id = check_messages(
             session["chat_id"], int(last_message_id), session["login"]
         )

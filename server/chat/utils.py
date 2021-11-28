@@ -2,7 +2,17 @@ from typing import Optional
 from chat.models import *
 from chat import *
 from hashlib import sha256
-import random, string
+import random, string, re
+
+
+def clear_text(input: str) -> str:
+    """
+    Clear text from ANSI escape sequences
+    :param input:
+    :return:
+    """
+    ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+    return ansi_escape.sub("", input)
 
 
 def random_str(length) -> str:
