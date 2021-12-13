@@ -1,6 +1,7 @@
 from requests import Session
-
-Options_file = "options.bin"
+import os
+base_dir = os.path.abspath(os.path.dirname(__file__))
+Options_file = os.path.join(base_dir, "options.bin")
 hash_salt = "secret_s2lt"
 
 class Server:
