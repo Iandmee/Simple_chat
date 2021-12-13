@@ -1,7 +1,7 @@
 from requests import Session
 
 Options_file = "options.bin"
-
+hash_salt = "secret_s2lt"
 
 class Server:
     domain = "207.154.242.118"

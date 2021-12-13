@@ -1,11 +1,19 @@
-import json, base64, threading, sys
+import json, base64, threading, sys,getpass
 from config import *
 import colorama, re
 from colorama import Style
 from termcolor import colored
 from time import sleep
-
+from hashlib import sha256
 colorama.init(autoreset=True)
+
+def hash(password:str)->str:
+    '''
+    Hash string by sha256
+    :param password:
+    :return:
+    '''
+    return sha256(password.encode()).hexdigest()
 
 
 def clear_text(input: str) -> str:
@@ -216,6 +224,7 @@ def chat_session(chat_name: str) -> None:
         + Style.RESET_ALL
         + colored(" ###", "magenta")
     )
+    print("For exit use: " + Style.BRIGHT + colored("#exit", "green"))
     try:
         messages_and_last_message_id = json.loads(api(count=20, type="get_messages"))
         Client.last_message_id = messages_and_last_message_id["last_message_id"]
@@ -289,10 +298,9 @@ def logged_in() -> None:
             if user_input == "1":
                 print("Chat_id: ", end="")
                 chat_id = clear_text(sys.stdin.readline().strip())
-                print("Password: ", end="")
-                password = clear_text(sys.stdin.readline().strip())
+                password = clear_text(getpass.getpass().strip())
                 status = json.loads(
-                    api(chat_id=chat_id, password=password, type="connect")
+                    api(chat_id=chat_id, password=hash(password), type="connect")
                 )
                 if status["status"]:
                     print(Style.BRIGHT + colored(status["status_message"], "green"))
@@ -304,15 +312,13 @@ def logged_in() -> None:
             elif user_input == "2":
                 print("Chat_name: ", end="")
                 chat_name = clear_text(sys.stdin.readline().strip())
-                print("Password: ", end="")
-                password = clear_text(sys.stdin.readline().strip())
-                print("Password_check: ", end="")
-                password_check = clear_text(sys.stdin.readline().strip())
+                password = clear_text(getpass.getpass().strip())
+                password_check = clear_text(getpass.getpass("Password_check: ").strip())
                 status = json.loads(
                     api(
                         chat_name=chat_name,
-                        password=password,
-                        password_check=password_check,
+                        password=hash(password),
+                        password_check=hash(password_check),
                         type="create",
                     )
                 )
@@ -445,8 +451,7 @@ def main_func() -> None:
                 print(colored("### Login form ###", "magenta"))
                 print("Login: ", end="")
                 Client.login = clear_text(sys.stdin.readline().strip())
-                print("Password: ", end="")
-                Client.password = clear_text(sys.stdin.readline().strip())
+                Client.password = hash(clear_text(getpass.getpass().strip()))
                 status = json.loads(
                     api(login=Client.login, password=Client.password, type="login")
                 )
@@ -461,10 +466,8 @@ def main_func() -> None:
                 print(colored("### Register form ###", "magenta"))
                 print("Login: ", end="")
                 Client.login = clear_text(sys.stdin.readline().strip())
-                print("Password: ", end="")
-                Client.password = clear_text(sys.stdin.readline().strip())
-                print("Repeat Password: ", end="")
-                password_check = clear_text(sys.stdin.readline().strip())
+                Client.password = hash(clear_text(getpass.getpass().strip()))
+                password_check = hash(clear_text(getpass.getpass("Repeat Password: ").strip()))
                 status = json.loads(
                     api(
                         login=Client.login,

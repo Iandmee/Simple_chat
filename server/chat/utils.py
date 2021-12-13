@@ -32,8 +32,7 @@ def check_login_and_password(login: str, password: str) -> bool:
     """
     return hasattr(
         User.query.filter_by(
-            login=login, password=sha256((password + hash_salt).encode()).hexdigest()
-        ).first(),
+            login=login, password=password).first(),
         "id",
     )
 
@@ -55,7 +54,7 @@ def add_new_user(login: str, password: str) -> bool:
     success_flag = True
     try:
         new_user = User(
-            login=login, password=sha256((password + hash_salt).encode()).hexdigest()
+            login=login, password=password
         )
         db.session.add(new_user)
         db.session.commit()
@@ -76,7 +75,7 @@ def create_new_chat(name: str, password: str) -> Optional[str]:
             chat_id = random_str(chat_id_length - 1) + "="
         new_chat = Chat(
             chat_name=name,
-            password=sha256((password + hash_salt).encode()).hexdigest(),
+            password=password,
             chat_id=chat_id,
         )
         db.session.add(new_chat)
@@ -94,7 +93,7 @@ def check_chat_creds(chat_id: str, password: str) -> Optional[str]:
     :return: chat_name
     """
     chat = Chat.query.filter_by(
-        chat_id=chat_id, password=sha256((password + hash_salt).encode()).hexdigest()
+        chat_id=chat_id, password=password
     ).first()
     if chat == None:
         return None
