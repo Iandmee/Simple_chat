@@ -1,4 +1,4 @@
-# :envelope::envelope::envelope: Simple_chat :envelope::envelope::envelope:
+# :envelope::envelope::envelope: Console_chat :envelope::envelope::envelope:
 ## Server initialization
 With *Gunicorn* in *server* folder: <br>
 ```gunicorn -w 5 wsgi:app``` <br>
