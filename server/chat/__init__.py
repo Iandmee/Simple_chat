@@ -13,4 +13,5 @@ chat_id_length = 32
 hash_salt = "secret_s2lt"
 from chat import utils, routes, models  # noqa
 
-db.create_all()
+with app.app_context():
+    db.create_all()
